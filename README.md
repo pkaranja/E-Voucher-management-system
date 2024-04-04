@@ -1,44 +1,50 @@
 # Zawadi
+### E-Voucher Management System Backend API
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
-Feel free to contact us for further questions.
+Welcome to Zawadi E-Voucher Management System Backend API repository! This API is built using the Spring Boot framework to provide robust and scalable solutions for managing electronic vouchers.
 
-## Development
+## Overview
+The E-Voucher Management System Backend API serves as the backbone for handling various operations related to electronic vouchers. It offers endpoints for creating, updating, retrieving, and deleting vouchers, as well as functionalities for managing users and transactions associated with vouchers.
 
-Update your local database connection in `application.properties` or create your own `application-local.properties` file to override
-settings for development.
+## Features
+- **User Management**: Register, authenticate, and manage user accounts.
+- **Voucher Management**: Create, update, retrieve, and delete vouchers.
+- **Transaction Management**: Track and manage transactions associated with vouchers.
+- **Security**: Implement secure authentication and authorization mechanisms to protect sensitive data.
+- **Scalability**: Designed to scale efficiently to handle a large volume of transactions and users.
 
-During development it is recommended to use the profile `local`. In IntelliJ `-Dspring.profiles.active=local` can be
-added in the VM options of the Run Configuration after enabling this property in "Modify options".
+## Technologies Used
+- Spring Boot: A powerful framework for building Java-based applications.
+- Spring Security: Provides authentication and authorization functionalities.
+- Spring Data JPA: Simplifies database operations using the Java Persistence API.
+- MySQL: A relational database management system for storing application data.
+- RESTful API: Exposes endpoints following RESTful principles for seamless integration with frontend applications.
 
-Lombok must be supported by your IDE. For IntelliJ install the Lombok plugin and enable annotation processing -
-[learn more](https://bootify.io/next-steps/spring-boot-with-lombok.html).
+## Installation
+1. Clone the repository: `git clone <repository-url>`
+2. Navigate to the project directory: `cd evoucher-management-backend`
+3. Build the project: `mvn clean install`
+4. Run the application: `java -jar target/evoucher-management-backend.jar`
 
-After starting the application it is accessible under `localhost:8080`.
+## Configuration
+- **Database Configuration**: Update `application.properties` file with your MySQL database connection details.
+- **Security Configuration**: Configure authentication and authorization settings in `SecurityConfig.java`.
 
-## Build
+## API Endpoints
+- `/api/auth/signup`: Register a new user.
+- `/api/auth/signin`: Authenticate user and generate access token.
+- `/api/vouchers`: Manage vouchers (GET, POST, PUT, DELETE).
+- `/api/users`: Manage users (GET, POST, PUT, DELETE).
+- `/api/transactions`: Manage transactions (GET, POST, PUT, DELETE).
 
-The application can be built using the following command:
+## Documentation
+For detailed API documentation and usage examples, refer to the Swagger documentation provided within the project.
 
-```
-mvnw clean package
-```
+## Contributing
+Contributions to enhance the E-Voucher Management System Backend API are welcome! Please feel free to fork the repository, make improvements, and submit pull requests.
 
-Start your application with the following command - here with the profile `production`:
+## License
+This project is licensed under the [MIT License](LICENSE).
 
-```
-java -Dspring.profiles.active=production -jar ./target/zawadi-0.0.1-SNAPSHOT.jar
-```
+Thank you for using the E-Voucher Management System Backend API!
 
-If required, a Docker image can be created with the Spring Boot plugin. Add `SPRING_PROFILES_ACTIVE=production` as
-environment variable when running the container.
-
-```
-mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=co.tz.qroo/zawadi
-```
-
-## Further readings
-
-* [Maven docs](https://maven.apache.org/guides/index.html)  
-* [Spring Boot reference](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)  
-* [Spring Data JPA reference](https://docs.spring.io/spring-data/jpa/reference/jpa.html)
