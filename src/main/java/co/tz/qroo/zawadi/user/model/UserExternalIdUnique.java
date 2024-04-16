@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.web.servlet.HandlerMapping;
 
-
 /**
  * Validate that the externalId value isn't taken yet.
  */
@@ -36,19 +35,19 @@ public @interface UserExternalIdUnique {
 
     Class<? extends Payload>[] payload() default {};
 
-    class UserExternalIdUniqueValidator implements ConstraintValidator<UserExternalIdUnique, UUID> {
+    class UserExternalIdUniqueValidator implements ConstraintValidator<UserExternalIdUnique, String> {
 
         private final UserService userService;
         private final HttpServletRequest request;
 
         public UserExternalIdUniqueValidator(final UserService userService,
-                final HttpServletRequest request) {
+                                             final HttpServletRequest request) {
             this.userService = userService;
             this.request = request;
         }
 
         @Override
-        public boolean isValid(final UUID value, final ConstraintValidatorContext cvContext) {
+        public boolean isValid(final String value, final ConstraintValidatorContext cvContext) {
             if (value == null) {
                 // no value present
                 return true;
@@ -56,7 +55,7 @@ public @interface UserExternalIdUnique {
             @SuppressWarnings("unchecked") final Map<String, String> pathVariables =
                     ((Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE));
             final String currentId = pathVariables.get("id");
-            if (currentId != null && value.equals(userService.get(UUID.fromString(currentId)).getExternalId())) {
+            if (currentId != null && value.equalsIgnoreCase(userService.get(UUID.fromString(currentId)).getExternalId())) {
                 // value hasn't changed
                 return true;
             }

@@ -28,7 +28,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
 @Table(name = "Giftcards")
 @EntityListeners(AuditingEntityListener.class)
@@ -76,7 +75,7 @@ public class Giftcard {
     private User purchaser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id", nullable = false)
+    @JoinColumn(name = "recipient_id")
     private User recipient;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -84,7 +83,7 @@ public class Giftcard {
     private Theme theme;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id", nullable = false, unique = true)
+    @JoinColumn(name = "transaction_id", unique = true)
     private Transaction transaction;
 
     @CreatedDate

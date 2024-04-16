@@ -41,6 +41,11 @@ public class UserResource {
         return ResponseEntity.ok(userService.get(id));
     }
 
+    @GetMapping("/getByFirebaseId/{id}")
+    public ResponseEntity<UserDTO> getUserByFirebaseId(@PathVariable(name = "id") final String id) {
+        return ResponseEntity.ok(userService.getUserByFirebaseId(id));
+    }
+
     @PostMapping
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createUser(@RequestBody @Valid final UserDTO userDTO) {

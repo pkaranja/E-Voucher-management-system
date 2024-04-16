@@ -1,6 +1,7 @@
 package co.tz.qroo.zawadi.user.domain;
 
 import co.tz.qroo.zawadi.user.model.ActiveStatus;
+import co.tz.qroo.zawadi.user.model.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -20,22 +21,20 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class User {
-
     @Id
     @Column(nullable = false, updatable = false, columnDefinition = "char(36)")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(generator = "uuid")
     private UUID id;
 
-    @Column(nullable = false, unique = true, columnDefinition = "char(36)")
-    private UUID externalId;
+    @Column(nullable = false, unique = true)
+    private String externalId;
 
     @Column
     private String address;
@@ -64,6 +63,49 @@ public class User {
 
     @Column(nullable = false)
     private LocalDate dateOfBirth;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column
+    private String location;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Column
+    private String nationality;
+
+    @Column
+    private String govtId;
+
+    @Column
+    private LocalDate govtIdExpiryDate;
+
+    @Column
+    private String govtIdType;
+
+    @Column
+    private String region;
+
+    @Column(nullable = false)
+    private Boolean privacyPolicyConsent;
+
+    @Column(nullable = false)
+    private LocalDate privacyPolicyConsentDate;
+
+    @Column(nullable = false)
+    private Boolean termsAndConditionConsent;
+
+    @Column(nullable = false)
+    private LocalDate termsAndConditionConsentDate;
+
+    @Column
+    private Boolean isAutopayOn;
+
+    @Column
+    private Boolean phoneNumberValidated;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

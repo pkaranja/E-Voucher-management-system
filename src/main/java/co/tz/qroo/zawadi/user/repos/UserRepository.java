@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    boolean existsByExternalId(UUID externalId);
+    User findByExternalIdIgnoreCase(String externalId);
+
+    boolean existsByExternalIdIgnoreCase(String externalId);
 
     boolean existsByPhoneNumberIgnoreCase(String phoneNumber);
 

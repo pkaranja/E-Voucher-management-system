@@ -11,7 +11,6 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class GiftcardDTO {
@@ -54,13 +53,10 @@ public class GiftcardDTO {
     @NotNull
     private UUID purchaser;
 
-    @NotNull
     private UUID recipient;
 
-    @GiftcardThemeUnique
     private UUID theme;
 
-    @NotNull
     @GiftcardTransactionUnique
     private UUID transaction;
 

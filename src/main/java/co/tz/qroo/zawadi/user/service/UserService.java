@@ -23,7 +23,7 @@ public class UserService {
     private final AuditRepository auditRepository;
 
     public UserService(final UserRepository userRepository,
-            final GiftcardRepository giftcardRepository, final AuditRepository auditRepository) {
+                       final GiftcardRepository giftcardRepository, final AuditRepository auditRepository) {
         this.userRepository = userRepository;
         this.giftcardRepository = giftcardRepository;
         this.auditRepository = auditRepository;
@@ -40,6 +40,15 @@ public class UserService {
         return userRepository.findById(id)
                 .map(user -> mapToDTO(user, new UserDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+
+    public UserDTO getUserByFirebaseId(final String externalId) {
+        User user = userRepository.findByExternalIdIgnoreCase(externalId);
+        if (user == null) {
+            throw new NotFoundException("User not found with external ID: " + externalId);
+        }
+        return mapToDTO(user, new UserDTO());
     }
 
     public UUID create(final UserDTO userDTO) {
@@ -88,8 +97,8 @@ public class UserService {
         return user;
     }
 
-    public boolean externalIdExists(final UUID externalId) {
-        return userRepository.existsByExternalId(externalId);
+    public boolean externalIdExists(final String externalId) {
+        return userRepository.existsByExternalIdIgnoreCase(externalId);
     }
 
     public boolean phoneNumberExists(final String phoneNumber) {
