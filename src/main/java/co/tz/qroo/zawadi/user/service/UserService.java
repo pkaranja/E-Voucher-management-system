@@ -14,7 +14,6 @@ import java.util.UUID;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserService {
 
@@ -41,7 +40,6 @@ public class UserService {
                 .map(user -> mapToDTO(user, new UserDTO()))
                 .orElseThrow(NotFoundException::new);
     }
-
 
     public UserDTO getUserByFirebaseId(final String externalId) {
         User user = userRepository.findByExternalIdIgnoreCase(externalId);
@@ -80,6 +78,20 @@ public class UserService {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setDateOfBirth(user.getDateOfBirth());
+        userDTO.setAge(user.getAge());
+        userDTO.setLocation(user.getLocation());
+        userDTO.setGender(user.getGender());
+        userDTO.setNationality(user.getNationality());
+        userDTO.setGovtId(user.getGovtId());
+        userDTO.setGovtIdExpiryDate(user.getGovtIdExpiryDate());
+        userDTO.setGovtIdType(user.getGovtIdType());
+        userDTO.setRegion(user.getRegion());
+        userDTO.setPrivacyPolicyConsent(user.getPrivacyPolicyConsent());
+        userDTO.setPrivacyPolicyConsentDate(user.getPrivacyPolicyConsentDate());
+        userDTO.setTermsAndConditionConsent(user.getTermsAndConditionConsent());
+        userDTO.setTermsAndConditionConsentDate(user.getTermsAndConditionConsentDate());
+        userDTO.setIsAutopayOn(user.getIsAutopayOn());
+        userDTO.setPhoneNumberValidated(user.getPhoneNumberValidated());
         return userDTO;
     }
 
@@ -94,6 +106,20 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setDateOfBirth(userDTO.getDateOfBirth());
+        user.setAge(userDTO.getAge());
+        user.setLocation(userDTO.getLocation());
+        user.setGender(userDTO.getGender());
+        user.setNationality(userDTO.getNationality());
+        user.setGovtId(userDTO.getGovtId());
+        user.setGovtIdExpiryDate(userDTO.getGovtIdExpiryDate());
+        user.setGovtIdType(userDTO.getGovtIdType());
+        user.setRegion(userDTO.getRegion());
+        user.setPrivacyPolicyConsent(userDTO.getPrivacyPolicyConsent());
+        user.setPrivacyPolicyConsentDate(userDTO.getPrivacyPolicyConsentDate());
+        user.setTermsAndConditionConsent(userDTO.getTermsAndConditionConsent());
+        user.setTermsAndConditionConsentDate(userDTO.getTermsAndConditionConsentDate());
+        user.setIsAutopayOn(userDTO.getIsAutopayOn());
+        user.setPhoneNumberValidated(userDTO.getPhoneNumberValidated());
         return user;
     }
 
