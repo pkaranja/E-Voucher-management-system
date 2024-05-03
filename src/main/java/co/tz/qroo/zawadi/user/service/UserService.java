@@ -92,6 +92,8 @@ public class UserService {
         userDTO.setTermsAndConditionConsentDate(user.getTermsAndConditionConsentDate());
         userDTO.setIsAutopayOn(user.getIsAutopayOn());
         userDTO.setPhoneNumberValidated(user.getPhoneNumberValidated());
+        userDTO.setLongitude(user.getLongitude());
+        userDTO.setLatitude(user.getLatitude());
         return userDTO;
     }
 
@@ -120,6 +122,8 @@ public class UserService {
         user.setTermsAndConditionConsentDate(userDTO.getTermsAndConditionConsentDate());
         user.setIsAutopayOn(userDTO.getIsAutopayOn());
         user.setPhoneNumberValidated(userDTO.getPhoneNumberValidated());
+        user.setLongitude(userDTO.getLongitude());
+        user.setLatitude(userDTO.getLatitude());
         return user;
     }
 

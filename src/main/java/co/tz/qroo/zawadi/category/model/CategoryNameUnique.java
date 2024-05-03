@@ -15,6 +15,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.web.servlet.HandlerMapping;
 
 
@@ -41,7 +42,7 @@ public @interface CategoryNameUnique {
         private final HttpServletRequest request;
 
         public CategoryNameUniqueValidator(final CategoryService categoryService,
-                final HttpServletRequest request) {
+                                           final HttpServletRequest request) {
             this.categoryService = categoryService;
             this.request = request;
         }
@@ -55,7 +56,7 @@ public @interface CategoryNameUnique {
             @SuppressWarnings("unchecked") final Map<String, String> pathVariables =
                     ((Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE));
             final String currentId = pathVariables.get("id");
-            if (currentId != null && value.equalsIgnoreCase(categoryService.get(Long.parseLong(currentId)).getName())) {
+            if (currentId != null && value.equalsIgnoreCase(categoryService.get(UUID.fromString(currentId)).getName())) {
                 // value hasn't changed
                 return true;
             }

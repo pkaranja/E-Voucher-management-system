@@ -16,7 +16,7 @@ public class UserDTO {
     private UUID id;
 
     @NotNull
-    @Size(max = 255)
+    @Size(max = 100)
     @UserExternalIdUnique
     private String externalId;
 
@@ -54,23 +54,23 @@ public class UserDTO {
     @NotNull
     private Integer age;
 
-    @Size(max = 255)
+    @Size(max = 50)
     private String location;
 
     private Gender gender;
 
-    @Size(max = 255)
+    @Size(max = 50)
     private String nationality;
 
-    @Size(max = 255)
+    @Size(max = 50)
     private String govtId;
 
     private LocalDate govtIdExpiryDate;
 
-    @Size(max = 255)
+    @Size(max = 50)
     private String govtIdType;
 
-    @Size(max = 255)
+    @Size(max = 50)
     private String region;
 
     @NotNull
@@ -89,5 +89,11 @@ public class UserDTO {
     private Boolean isAutopayOn;
 
     private Boolean phoneNumberValidated;
+
+    @Size(max = 20)
+    private String longitude;
+
+    @Size(max = 20)
+    private String latitude;
 
 }

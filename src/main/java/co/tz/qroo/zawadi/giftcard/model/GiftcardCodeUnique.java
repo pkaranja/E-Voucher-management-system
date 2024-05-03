@@ -42,7 +42,7 @@ public @interface GiftcardCodeUnique {
         private final HttpServletRequest request;
 
         public GiftcardCodeUniqueValidator(final GiftcardService giftcardService,
-                final HttpServletRequest request) {
+                                           final HttpServletRequest request) {
             this.giftcardService = giftcardService;
             this.request = request;
         }

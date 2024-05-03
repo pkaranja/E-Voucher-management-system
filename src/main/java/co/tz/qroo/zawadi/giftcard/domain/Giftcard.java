@@ -3,7 +3,6 @@ package co.tz.qroo.zawadi.giftcard.domain;
 import co.tz.qroo.zawadi.giftcard.model.GiftcardStatus;
 import co.tz.qroo.zawadi.issuer.domain.Issuer;
 import co.tz.qroo.zawadi.theme.domain.Theme;
-import co.tz.qroo.zawadi.transaction.domain.Transaction;
 import co.tz.qroo.zawadi.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,12 +13,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 @Entity
 @Table(name = "Giftcards")
@@ -53,11 +55,14 @@ public class Giftcard {
     @Column(nullable = false)
     private LocalDate expirationDate;
 
-    @Column(columnDefinition = "longtext")
+    @Column(nullable = false, columnDefinition = "longtext")
     private String message;
 
     @Column(nullable = false)
     private String purchaserName;
+
+    @Column
+    private String recipientPhoneNumber;
 
     @Column(nullable = false)
     private String receipientName;
@@ -66,9 +71,16 @@ public class Giftcard {
     @Enumerated(EnumType.STRING)
     private GiftcardStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issuer_id", nullable = false)
-    private Issuer issuer;
+    @Column(nullable = false, length = 50)
+    private String title;
+
+    @ManyToMany
+    @JoinTable(
+            name = "GiftcardIssuers",
+            joinColumns = @JoinColumn(name = "giftcardId"),
+            inverseJoinColumns = @JoinColumn(name = "issuerId")
+    )
+    private Set<Issuer> issuers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchaser_id", nullable = false)
@@ -78,13 +90,9 @@ public class Giftcard {
     @JoinColumn(name = "recipient_id")
     private User recipient;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id", unique = true)
-    private Transaction transaction;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

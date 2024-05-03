@@ -47,7 +47,7 @@ public class Theme {
     @Column(nullable = false, length = 6)
     private String secondaryColor;
 
-    @Column(length = 5)
+    @Column(length = 6)
     private String bgColor;
 
     @CreatedDate

@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -34,11 +36,15 @@ public class GiftcardDTO {
     @NotNull
     private LocalDate expirationDate;
 
+    @NotNull
     private String message;
 
     @NotNull
     @Size(max = 255)
     private String purchaserName;
+
+    @Size(max = 255)
+    private String recipientPhoneNumber;
 
     @NotNull
     @Size(max = 255)
@@ -48,16 +54,17 @@ public class GiftcardDTO {
     private GiftcardStatus status;
 
     @NotNull
-    private UUID issuer;
+    @Size(max = 50)
+    private String title;
+
+    private List<UUID> issuers;
 
     @NotNull
     private UUID purchaser;
 
     private UUID recipient;
 
+    @NotNull
     private UUID theme;
-
-    @GiftcardTransactionUnique
-    private UUID transaction;
 
 }

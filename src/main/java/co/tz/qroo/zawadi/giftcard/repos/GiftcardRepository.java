@@ -3,15 +3,14 @@ package co.tz.qroo.zawadi.giftcard.repos;
 import co.tz.qroo.zawadi.giftcard.domain.Giftcard;
 import co.tz.qroo.zawadi.issuer.domain.Issuer;
 import co.tz.qroo.zawadi.theme.domain.Theme;
-import co.tz.qroo.zawadi.transaction.domain.Transaction;
 import co.tz.qroo.zawadi.user.domain.User;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface GiftcardRepository extends JpaRepository<Giftcard, UUID> {
-
-    Giftcard findFirstByIssuer(Issuer issuer);
+    Giftcard findFirstByIssuers(Issuer issuer);
 
     Giftcard findFirstByPurchaser(User user);
 
@@ -19,12 +18,7 @@ public interface GiftcardRepository extends JpaRepository<Giftcard, UUID> {
 
     Giftcard findFirstByTheme(Theme theme);
 
-    Giftcard findFirstByTransaction(Transaction transaction);
+    List<Giftcard> findAllByIssuers(Issuer issuer);
 
     boolean existsByCodeIgnoreCase(String code);
-
-    boolean existsByThemeId(UUID id);
-
-    boolean existsByTransactionId(UUID id);
-
 }

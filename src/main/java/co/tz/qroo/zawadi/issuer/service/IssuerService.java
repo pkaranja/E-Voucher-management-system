@@ -1,5 +1,7 @@
 package co.tz.qroo.zawadi.issuer.service;
 
+import co.tz.qroo.zawadi.branch.domain.Branch;
+import co.tz.qroo.zawadi.branch.repos.BranchRepository;
 import co.tz.qroo.zawadi.category.domain.Category;
 import co.tz.qroo.zawadi.category.repos.CategoryRepository;
 import co.tz.qroo.zawadi.giftcard.domain.Giftcard;
@@ -27,20 +29,19 @@ import org.slf4j.LoggerFactory;
 @Service
 @Transactional
 public class IssuerService {
-    private static final Logger logger = LoggerFactory.getLogger(IssuerService.class);
+
     private final IssuerRepository issuerRepository;
     private final CategoryRepository categoryRepository;
     private final GiftcardRepository giftcardRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final BranchRepository branchRepository;
 
     public IssuerService(final IssuerRepository issuerRepository,
-            final CategoryRepository categoryRepository,
-            final GiftcardRepository giftcardRepository) {
+                         final CategoryRepository categoryRepository,
+                         final GiftcardRepository giftcardRepository, final BranchRepository branchRepository) {
         this.issuerRepository = issuerRepository;
         this.categoryRepository = categoryRepository;
         this.giftcardRepository = giftcardRepository;
+        this.branchRepository = branchRepository;
     }
 
     public List<IssuerDTO> findAll() {
@@ -113,6 +114,7 @@ public class IssuerService {
         issuerDTO.setAddress(issuer.getAddress());
         issuerDTO.setHits(issuer.getHits());
         issuerDTO.setLogo(issuer.getLogo());
+        issuerDTO.setBanner(issuer.getBanner());
         issuerDTO.setFacebook(issuer.getFacebook());
         issuerDTO.setInstagram(issuer.getInstagram());
         issuerDTO.setPrimaryColor(issuer.getPrimaryColor());
@@ -128,7 +130,6 @@ public class IssuerService {
         issuerDTO.setCategory(issuer.getCategory().stream()
                 .map(Category::getId)
                 .toList());
-
         return issuerDTO;
     }
 
@@ -140,6 +141,7 @@ public class IssuerService {
         issuer.setAddress(issuerDTO.getAddress());
         issuer.setHits(issuerDTO.getHits());
         issuer.setLogo(issuerDTO.getLogo());
+        issuer.setBanner(issuerDTO.getBanner());
         issuer.setFacebook(issuerDTO.getFacebook());
         issuer.setInstagram(issuerDTO.getInstagram());
         issuer.setPrimaryColor(issuerDTO.getPrimaryColor());
@@ -155,11 +157,9 @@ public class IssuerService {
         final List<Category> category = categoryRepository.findAllById(
                 issuerDTO.getCategory() == null ? Collections.emptyList() : issuerDTO.getCategory());
         if (category.size() != (issuerDTO.getCategory() == null ? 0 : issuerDTO.getCategory().size())) {
-            throw new NotFoundException("Category not found");
+            throw new NotFoundException("one of category not found");
         }
         issuer.setCategory(new HashSet<>(category));
-
-
         return issuer;
     }
 
@@ -171,10 +171,10 @@ public class IssuerService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Issuer issuer = issuerRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Giftcard issuerGiftcard = giftcardRepository.findFirstByIssuer(issuer);
-        if (issuerGiftcard != null) {
-            referencedWarning.setKey("issuer.giftcard.issuer.referenced");
-            referencedWarning.addParam(issuerGiftcard.getId());
+        final Branch issuerBranch = branchRepository.findFirstByIssuer(issuer);
+        if (issuerBranch != null) {
+            referencedWarning.setKey("issuer.branch.issuer.referenced");
+            referencedWarning.addParam(issuerBranch.getId());
             return referencedWarning;
         }
         return null;

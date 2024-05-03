@@ -37,7 +37,7 @@ public class ThemeDTO {
     @Size(max = 6)
     private String secondaryColor;
 
-    @Size(max = 5)
+    @Size(max = 6)
     private String bgColor;
 
 }

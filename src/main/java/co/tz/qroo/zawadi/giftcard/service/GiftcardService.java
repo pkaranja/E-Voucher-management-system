@@ -12,6 +12,10 @@ import co.tz.qroo.zawadi.transaction.repos.TransactionRepository;
 import co.tz.qroo.zawadi.user.domain.User;
 import co.tz.qroo.zawadi.user.repos.UserRepository;
 import co.tz.qroo.zawadi.util.NotFoundException;
+import co.tz.qroo.zawadi.util.ReferencedWarning;
+import jakarta.transaction.Transactional;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Sort;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@Transactional
 public class GiftcardService {
 
     private final GiftcardRepository giftcardRepository;
@@ -28,9 +33,9 @@ public class GiftcardService {
     private final TransactionRepository transactionRepository;
 
     public GiftcardService(final GiftcardRepository giftcardRepository,
-            final IssuerRepository issuerRepository, final UserRepository userRepository,
-            final ThemeRepository themeRepository,
-            final TransactionRepository transactionRepository) {
+                           final IssuerRepository issuerRepository, final UserRepository userRepository,
+                           final ThemeRepository themeRepository,
+                           final TransactionRepository transactionRepository) {
         this.giftcardRepository = giftcardRepository;
         this.issuerRepository = issuerRepository;
         this.userRepository = userRepository;
@@ -76,13 +81,16 @@ public class GiftcardService {
         giftcardDTO.setExpirationDate(giftcard.getExpirationDate());
         giftcardDTO.setMessage(giftcard.getMessage());
         giftcardDTO.setPurchaserName(giftcard.getPurchaserName());
+        giftcardDTO.setRecipientPhoneNumber(giftcard.getRecipientPhoneNumber());
         giftcardDTO.setReceipientName(giftcard.getReceipientName());
         giftcardDTO.setStatus(giftcard.getStatus());
-        giftcardDTO.setIssuer(giftcard.getIssuer() == null ? null : giftcard.getIssuer().getId());
+        giftcardDTO.setTitle(giftcard.getTitle());
+        giftcardDTO.setIssuers(giftcard.getIssuers().stream()
+                .map(Issuer::getId)
+                .toList());
         giftcardDTO.setPurchaser(giftcard.getPurchaser() == null ? null : giftcard.getPurchaser().getId());
         giftcardDTO.setRecipient(giftcard.getRecipient() == null ? null : giftcard.getRecipient().getId());
         giftcardDTO.setTheme(giftcard.getTheme() == null ? null : giftcard.getTheme().getId());
-        giftcardDTO.setTransaction(giftcard.getTransaction() == null ? null : giftcard.getTransaction().getId());
         return giftcardDTO;
     }
 
@@ -93,11 +101,16 @@ public class GiftcardService {
         giftcard.setExpirationDate(giftcardDTO.getExpirationDate());
         giftcard.setMessage(giftcardDTO.getMessage());
         giftcard.setPurchaserName(giftcardDTO.getPurchaserName());
+        giftcard.setRecipientPhoneNumber(giftcardDTO.getRecipientPhoneNumber());
         giftcard.setReceipientName(giftcardDTO.getReceipientName());
         giftcard.setStatus(giftcardDTO.getStatus());
-        final Issuer issuer = giftcardDTO.getIssuer() == null ? null : issuerRepository.findById(giftcardDTO.getIssuer())
-                .orElseThrow(() -> new NotFoundException("issuer not found"));
-        giftcard.setIssuer(issuer);
+        giftcard.setTitle(giftcardDTO.getTitle());
+        final List<Issuer> issuers = issuerRepository.findAllById(
+                giftcardDTO.getIssuers() == null ? Collections.emptyList() : giftcardDTO.getIssuers());
+        if (issuers.size() != (giftcardDTO.getIssuers() == null ? 0 : giftcardDTO.getIssuers().size())) {
+            throw new NotFoundException("one of issuers not found");
+        }
+        giftcard.setIssuers(new HashSet<>(issuers));
         final User purchaser = giftcardDTO.getPurchaser() == null ? null : userRepository.findById(giftcardDTO.getPurchaser())
                 .orElseThrow(() -> new NotFoundException("purchaser not found"));
         giftcard.setPurchaser(purchaser);
@@ -107,9 +120,6 @@ public class GiftcardService {
         final Theme theme = giftcardDTO.getTheme() == null ? null : themeRepository.findById(giftcardDTO.getTheme())
                 .orElseThrow(() -> new NotFoundException("theme not found"));
         giftcard.setTheme(theme);
-        final Transaction transaction = giftcardDTO.getTransaction() == null ? null : transactionRepository.findById(giftcardDTO.getTransaction())
-                .orElseThrow(() -> new NotFoundException("transaction not found"));
-        giftcard.setTransaction(transaction);
         return giftcard;
     }
 
@@ -117,12 +127,17 @@ public class GiftcardService {
         return giftcardRepository.existsByCodeIgnoreCase(code);
     }
 
-    public boolean themeExists(final UUID id) {
-        return giftcardRepository.existsByThemeId(id);
-    }
-
-    public boolean transactionExists(final UUID id) {
-        return giftcardRepository.existsByTransactionId(id);
+    public ReferencedWarning getReferencedWarning(final UUID id) {
+        final ReferencedWarning referencedWarning = new ReferencedWarning();
+        final Giftcard giftcard = giftcardRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        final Transaction giftcardTransaction = transactionRepository.findFirstByGiftcard(giftcard);
+        if (giftcardTransaction != null) {
+            referencedWarning.setKey("giftcard.transaction.giftcard.referenced");
+            referencedWarning.addParam(giftcardTransaction.getId());
+            return referencedWarning;
+        }
+        return null;
     }
 
 }

@@ -27,13 +27,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Setter
 public class User {
+
     @Id
     @Column(nullable = false, updatable = false, columnDefinition = "char(36)")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(generator = "uuid")
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     private String externalId;
 
     @Column
@@ -67,26 +68,26 @@ public class User {
     @Column(nullable = false)
     private Integer age;
 
-    @Column
+    @Column(length = 50)
     private String location;
 
     @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column
+    @Column(length = 50)
     private String nationality;
 
-    @Column
+    @Column(length = 50)
     private String govtId;
 
     @Column
     private LocalDate govtIdExpiryDate;
 
-    @Column
+    @Column(length = 50)
     private String govtIdType;
 
-    @Column
+    @Column(length = 50)
     private String region;
 
     @Column(nullable = false)
@@ -106,6 +107,12 @@ public class User {
 
     @Column
     private Boolean phoneNumberValidated;
+
+    @Column(length = 20)
+    private String longitude;
+
+    @Column(length = 20)
+    private String latitude;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
