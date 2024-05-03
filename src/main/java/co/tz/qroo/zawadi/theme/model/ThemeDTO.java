@@ -13,8 +13,17 @@ public class ThemeDTO {
 
     private UUID id;
 
+    @NotNull
     @Size(max = 255)
-    private String backgroundImage;
+    private String name;
+
+    @NotNull
+    @Size(max = 255)
+    private String thumbnailPath;
+
+    @NotNull
+    @Size(max = 255)
+    private String category;
 
     @NotNull
     @Size(max = 6)
@@ -28,7 +37,7 @@ public class ThemeDTO {
     @Size(max = 6)
     private String secondaryColor;
 
-    @Size(max = 255)
-    private String googleFont;
+    @Size(max = 5)
+    private String bgColor;
 
 }

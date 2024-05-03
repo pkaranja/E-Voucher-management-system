@@ -11,10 +11,12 @@ import java.util.UUID;
 
 
 public interface IssuerRepository extends JpaRepository<Issuer, UUID>, JpaSpecificationExecutor<Issuer> {
+
     boolean existsByNameIgnoreCase(String name);
     Issuer findFirstByCategory(Category category);
     List<Issuer> findAllByCategory(Category category);
 
     @Query(value = "SELECT ic.issuer_id FROM issuer_categories ic WHERE ic.category_id = :categoryId", nativeQuery = true)
-    List<UUID> findAllIssuerIdsByCategory(Long categoryId);
+    List<UUID> findAllIssuerIdsByCategory(UUID categoryId);
+
 }

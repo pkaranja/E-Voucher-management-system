@@ -24,7 +24,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
 @Table(name = "Issuers")
 @EntityListeners(AuditingEntityListener.class)
@@ -58,6 +57,9 @@ public class Issuer {
 
     @Column(nullable = false)
     private String logo;
+
+    @Column(nullable = false)
+    private String banner;
 
     @Column
     private String facebook;

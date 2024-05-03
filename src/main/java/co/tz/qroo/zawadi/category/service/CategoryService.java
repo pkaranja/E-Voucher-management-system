@@ -9,6 +9,7 @@ import co.tz.qroo.zawadi.util.RestApiFilter.SearchRequest;
 import co.tz.qroo.zawadi.util.RestApiFilter.SearchSpecification;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,26 +44,26 @@ public class CategoryService {
         return categoryPage.map(category -> mapToDTO(category, new CategoryDTO()));
     }
 
-    public CategoryDTO get(final Long id) {
+    public CategoryDTO get(final UUID id) {
         return categoryRepository.findById(id)
                 .map(category -> mapToDTO(category, new CategoryDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final CategoryDTO categoryDTO) {
+    public UUID create(final CategoryDTO categoryDTO) {
         final Category category = new Category();
         mapToEntity(categoryDTO, category);
         return categoryRepository.save(category).getId();
     }
 
-    public void update(final Long id, final CategoryDTO categoryDTO) {
+    public void update(final UUID id, final CategoryDTO categoryDTO) {
         final Category category = categoryRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(categoryDTO, category);
         categoryRepository.save(category);
     }
 
-    public void delete(final Long id) {
+    public void delete(final UUID id) {
         final Category category = categoryRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         // remove many-to-many relations at owning side

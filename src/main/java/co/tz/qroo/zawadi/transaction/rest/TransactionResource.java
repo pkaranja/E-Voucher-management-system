@@ -2,8 +2,6 @@ package co.tz.qroo.zawadi.transaction.rest;
 
 import co.tz.qroo.zawadi.transaction.model.TransactionDTO;
 import co.tz.qroo.zawadi.transaction.service.TransactionService;
-import co.tz.qroo.zawadi.util.ReferencedException;
-import co.tz.qroo.zawadi.util.ReferencedWarning;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -59,10 +57,6 @@ public class TransactionResource {
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteTransaction(@PathVariable(name = "id") final UUID id) {
-        final ReferencedWarning referencedWarning = transactionService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
         transactionService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -29,8 +29,14 @@ public class Theme {
     @GeneratedValue(generator = "uuid")
     private UUID id;
 
-    @Column
-    private String backgroundImage;
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String thumbnailPath;
+
+    @Column(nullable = false)
+    private String category;
 
     @Column(nullable = false, length = 6)
     private String fontColor;
@@ -41,8 +47,8 @@ public class Theme {
     @Column(nullable = false, length = 6)
     private String secondaryColor;
 
-    @Column
-    private String googleFont;
+    @Column(length = 5)
+    private String bgColor;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

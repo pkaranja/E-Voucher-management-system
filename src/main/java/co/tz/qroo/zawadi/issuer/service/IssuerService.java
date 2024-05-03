@@ -31,6 +31,7 @@ public class IssuerService {
     private final IssuerRepository issuerRepository;
     private final CategoryRepository categoryRepository;
     private final GiftcardRepository giftcardRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -56,7 +57,7 @@ public class IssuerService {
         return issuerPage.map(issuer -> mapToDTO(issuer, new IssuerDTO()));
     }
 
-    public Page<IssuerDTO> fetchIssuersByCategory(Long categoryId, SearchRequest request) {
+    public Page<IssuerDTO> fetchIssuersByCategory(UUID categoryId, SearchRequest request) {
         //Get Issuer ID's from issuer category
         List<UUID> issuerIds = issuerRepository.findAllIssuerIdsByCategory(categoryId);
 
@@ -125,8 +126,9 @@ public class IssuerService {
         issuerDTO.setFeatured(issuer.getFeatured());
         issuerDTO.setStatus(issuer.getStatus());
         issuerDTO.setCategory(issuer.getCategory().stream()
-                .map(category -> category.getId())
+                .map(Category::getId)
                 .toList());
+
         return issuerDTO;
     }
 
@@ -153,9 +155,11 @@ public class IssuerService {
         final List<Category> category = categoryRepository.findAllById(
                 issuerDTO.getCategory() == null ? Collections.emptyList() : issuerDTO.getCategory());
         if (category.size() != (issuerDTO.getCategory() == null ? 0 : issuerDTO.getCategory().size())) {
-            throw new NotFoundException("one of category not found");
+            throw new NotFoundException("Category not found");
         }
         issuer.setCategory(new HashSet<>(category));
+
+
         return issuer;
     }
 

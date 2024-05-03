@@ -8,6 +8,7 @@ import co.tz.qroo.zawadi.util.RestApiFilter.SearchRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,24 +46,24 @@ public class CategoryResource {
     public Page<CategoryDTO> searchCategories(@RequestBody SearchRequest request) { return categoryService.searchAll(request); }
 
     @PostMapping("/{id}/issuers")
-    public Page<IssuerDTO> searchIssuers(@RequestBody SearchRequest request, @PathVariable(name = "id") final Long id ){
+    public Page<IssuerDTO> searchIssuers(@RequestBody SearchRequest request, @PathVariable(name = "id") final UUID id ){
         return issuerService.fetchIssuersByCategory(id , request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable(name = "id") final UUID id) {
         return ResponseEntity.ok(categoryService.get(id));
     }
 
     @PostMapping("/create")
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createCategory(@RequestBody @Valid final CategoryDTO categoryDTO) {
-        final Long createdId = categoryService.create(categoryDTO);
+    public ResponseEntity<UUID> createCategory(@RequestBody @Valid final CategoryDTO categoryDTO) {
+        final UUID createdId = categoryService.create(categoryDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateCategory(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<UUID> updateCategory(@PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final CategoryDTO categoryDTO) {
         categoryService.update(id, categoryDTO);
         return ResponseEntity.ok(id);
@@ -70,7 +71,7 @@ public class CategoryResource {
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteCategory(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable(name = "id") final UUID id) {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }

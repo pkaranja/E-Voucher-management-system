@@ -10,4 +10,5 @@ public class ZawadiApplication {
     public static void main(final String[] args) {
         SpringApplication.run(ZawadiApplication.class, args);
     }
+
 }

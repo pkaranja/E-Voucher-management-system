@@ -57,20 +57,24 @@ public class ThemeService {
 
     private ThemeDTO mapToDTO(final Theme theme, final ThemeDTO themeDTO) {
         themeDTO.setId(theme.getId());
-        themeDTO.setBackgroundImage(theme.getBackgroundImage());
+        themeDTO.setName(theme.getName());
+        themeDTO.setThumbnailPath(theme.getThumbnailPath());
+        themeDTO.setCategory(theme.getCategory());
         themeDTO.setFontColor(theme.getFontColor());
         themeDTO.setPrimaryColor(theme.getPrimaryColor());
         themeDTO.setSecondaryColor(theme.getSecondaryColor());
-        themeDTO.setGoogleFont(theme.getGoogleFont());
+        themeDTO.setBgColor(theme.getBgColor());
         return themeDTO;
     }
 
     private Theme mapToEntity(final ThemeDTO themeDTO, final Theme theme) {
-        theme.setBackgroundImage(themeDTO.getBackgroundImage());
+        theme.setName(themeDTO.getName());
+        theme.setThumbnailPath(themeDTO.getThumbnailPath());
+        theme.setCategory(themeDTO.getCategory());
         theme.setFontColor(themeDTO.getFontColor());
         theme.setPrimaryColor(themeDTO.getPrimaryColor());
         theme.setSecondaryColor(themeDTO.getSecondaryColor());
-        theme.setGoogleFont(themeDTO.getGoogleFont());
+        theme.setBgColor(themeDTO.getBgColor());
         return theme;
     }
 

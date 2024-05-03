@@ -25,17 +25,25 @@ public class TransactionDTO {
 
     @NotNull
     @Size(max = 255)
-    private String paymentMethod;
-
-    @NotNull
-    @Size(max = 255)
-    private String externalId;
+    private String externalTransactionRef;
 
     @NotNull
     @Size(max = 255)
     private String provider;
 
-    @Size(max = 255)
-    private String status;
+    @NotNull
+    private TransactionType transactionType;
+
+    @Size(max = 100)
+    private String email;
+
+    @NotNull
+    @Size(max = 20)
+    private String currency;
+
+    @NotNull
+    private String narrative;
+
+    private UUID giftcard;
 
 }

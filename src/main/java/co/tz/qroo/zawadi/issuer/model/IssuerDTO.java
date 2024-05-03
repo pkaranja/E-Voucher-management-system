@@ -12,7 +12,6 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class IssuerDTO {
@@ -44,6 +43,10 @@ public class IssuerDTO {
     @NotNull
     @Size(max = 255)
     private String logo;
+
+    @NotNull
+    @Size(max = 255)
+    private String banner;
 
     @Size(max = 255)
     private String facebook;
@@ -86,6 +89,6 @@ public class IssuerDTO {
     @NotNull
     private ActiveStatus status;
 
-    private List<Long> category;
+    private List<UUID> category;
 
 }

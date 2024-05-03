@@ -6,7 +6,6 @@ import co.tz.qroo.zawadi.transaction.domain.Transaction;
 import co.tz.qroo.zawadi.transaction.model.TransactionDTO;
 import co.tz.qroo.zawadi.transaction.repos.TransactionRepository;
 import co.tz.qroo.zawadi.util.NotFoundException;
-import co.tz.qroo.zawadi.util.ReferencedWarning;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Sort;
@@ -59,34 +58,29 @@ public class TransactionService {
             final TransactionDTO transactionDTO) {
         transactionDTO.setId(transaction.getId());
         transactionDTO.setAmount(transaction.getAmount());
-        transactionDTO.setPaymentMethod(transaction.getPaymentMethod());
-        transactionDTO.setExternalId(transaction.getExternalId());
+        transactionDTO.setExternalTransactionRef(transaction.getExternalTransactionRef());
         transactionDTO.setProvider(transaction.getProvider());
-        transactionDTO.setStatus(transaction.getStatus());
+        transactionDTO.setTransactionType(transaction.getTransactionType());
+        transactionDTO.setEmail(transaction.getEmail());
+        transactionDTO.setCurrency(transaction.getCurrency());
+        transactionDTO.setNarrative(transaction.getNarrative());
+        transactionDTO.setGiftcard(transaction.getGiftcard() == null ? null : transaction.getGiftcard().getId());
         return transactionDTO;
     }
 
     private Transaction mapToEntity(final TransactionDTO transactionDTO,
             final Transaction transaction) {
         transaction.setAmount(transactionDTO.getAmount());
-        transaction.setPaymentMethod(transactionDTO.getPaymentMethod());
-        transaction.setExternalId(transactionDTO.getExternalId());
+        transaction.setExternalTransactionRef(transactionDTO.getExternalTransactionRef());
         transaction.setProvider(transactionDTO.getProvider());
-        transaction.setStatus(transactionDTO.getStatus());
+        transaction.setTransactionType(transactionDTO.getTransactionType());
+        transaction.setEmail(transactionDTO.getEmail());
+        transaction.setCurrency(transactionDTO.getCurrency());
+        transaction.setNarrative(transactionDTO.getNarrative());
+        final Giftcard giftcard = transactionDTO.getGiftcard() == null ? null : giftcardRepository.findById(transactionDTO.getGiftcard())
+                .orElseThrow(() -> new NotFoundException("giftcard not found"));
+        transaction.setGiftcard(giftcard);
         return transaction;
-    }
-
-    public ReferencedWarning getReferencedWarning(final UUID id) {
-        final ReferencedWarning referencedWarning = new ReferencedWarning();
-        final Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        final Giftcard transactionGiftcard = giftcardRepository.findFirstByTransaction(transaction);
-        if (transactionGiftcard != null) {
-            referencedWarning.setKey("transaction.giftcard.transaction.referenced");
-            referencedWarning.addParam(transactionGiftcard.getId());
-            return referencedWarning;
-        }
-        return null;
     }
 
 }
