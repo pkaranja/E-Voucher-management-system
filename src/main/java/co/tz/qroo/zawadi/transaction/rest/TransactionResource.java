@@ -1,5 +1,7 @@
 package co.tz.qroo.zawadi.transaction.rest;
 
+import co.tz.qroo.zawadi.transaction.model.GiftcardTransactionDTO;
+import co.tz.qroo.zawadi.transaction.model.GiftcardTransactionResponseDTO;
 import co.tz.qroo.zawadi.transaction.model.TransactionDTO;
 import co.tz.qroo.zawadi.transaction.service.TransactionService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,6 +42,13 @@ public class TransactionResource {
     }
 
     @PostMapping
+    @ApiResponse(responseCode = "201")
+    public ResponseEntity<GiftcardTransactionResponseDTO> createGiftcardTransaction( @RequestBody @Valid final GiftcardTransactionDTO giftcardTransactionDTO) {
+        final GiftcardTransactionResponseDTO transactionResponse = transactionService.createGiftcardTransaction(giftcardTransactionDTO);
+        return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
     @ApiResponse(responseCode = "201")
     public ResponseEntity<UUID> createTransaction(
             @RequestBody @Valid final TransactionDTO transactionDTO) {
